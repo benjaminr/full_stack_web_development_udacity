@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  display: block;
+  font-family: 'Quicksand';
+}
+
+h1, h2, h3 {
+  font-family: 'Quicksand';
+  text-align: center;
+  vertical-align: center;
+}
+
+img.project_img {
+  max-width: 60%;
+  max-height: 100%;
+  min-width: 60%;
+  min-height: 100%;
+  object-fit: cover;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+header {
+  padding-bottom: 75px;
+}
+
+.brand-logo.left {
+  color: black;
+  padding-left: 20px
+}
