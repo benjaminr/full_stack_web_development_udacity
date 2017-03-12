@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ben's Blog</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Benjamin</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/blog">Blog</a></li>
+        </ul>
+        {# [START profile] #}
+        <p class="navbar-text navbar-right">
+            {% if session.profile %}
+            <a href="/logout">
+                {% if session.profile.image %}
+                <img class="img-circle" src="{{session.profile.image.url}}" width="24">
+                {% endif %}
+                {{session.profile.displayName}}
+            </a>
+            {% else %}
+            <a href="/oauth2authorize">Login</a>
+            {% endif %}
+        </p>
+        {# [END profile] #}
+    </div>
+</div>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+{{user}}
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if session.profile %}
+<a href="/blog/my-posts" class="btn btn-default btn-sm">
+    My Posts
+</a>
+<a href="/blog/add-post" class="btn btn-success btn-sm">
+    <i class="glyphicon glyphicon-plus"></i>
+    Add Blog Post
+</a>
+{% endif %}
+
+{% for blog_post in blog_posts %}
+<div class="media">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="panel-title" href="/blog/{{blog_post.id}}">
+                {{blog_post.title}}
+            </a>
+            {% if session.profile %}
+            {% if session.profile.id == blog_post.createdById %}
+            <a href="/blog/{{blog_post.id}}/edit" class="btn bt-default btn-sm">
+                <i class="glyphicon glyphicon-edit"></i>
+            </a>
+            {% endif %}
+            {% endif %}
+        </div>
+        <div class="panel-body">
+            {{blog_post.body[:100]}} ...
+        </div>
+        <div class="panel-footer">
+            <small>Posted by {{blog_post.createdBy}}</small>
+        </div>
+    </div>
+</div>
+{% else %}
+<p>No blog posts found</p>
+{% endfor %}
+
+{% if next_page_token %}
+<nav>
+    <ul class="pager">
+        <li><a href="?page_token={{next_page_token}}">More</a></li>
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="media">
+    <div class="media-body">
+        <h4 class="blog-post-title">
+            {{blog_post.title}}
+        </h4>
+        <h5 class="blog-post-author">By {{blog_post.createdBy|default('Anon', True)}}</h5>
+        <p class="blog-post-body">{{blog_post.body}}</p>
+    </div>
+</div>
+
+{% if session.profile.id == blog_post.createdById %}
+<div class="btn-group">
+    <a href="/blog/{{blog_post.id}}/edit" class="btn btn-primary btn-sm">
+        <i class="glyphicon glyphicon-edit"></i>
+        Edit blog post
+    </a>
+    <a href="/blog/{{blog_post.id}}/delete" class="btn btn-danger btn-sm">
+        <i class="glyphicon glyphicon-trash"></i>
+        Delete blog post
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}
