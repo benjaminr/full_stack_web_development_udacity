@@ -18,14 +18,13 @@
         {# [START profile] #}
         <p class="navbar-text navbar-right">
             {% if session.profile %}
-            <a href="/logout">
-                {% if session.profile.image %}
+            {% if session.profile.image %}
                 <img class="img-circle" src="{{session.profile.image.url}}" width="24">
                 {% endif %}
                 {{session.profile.displayName}}
-            </a>
             {% else %}
-            <a href="/oauth2authorize">Login</a>
+            <a href="/logout"> | logout</a>
+            <a href="/oauth2authorize">Login with Google</a>
             {% endif %}
         </p>
         {# [END profile] #}
