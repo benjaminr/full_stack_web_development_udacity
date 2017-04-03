@@ -35,8 +35,6 @@ def list_mine():
             "list_blog_posts.html",
             blog_posts=blog_posts,
             next_page_token=next_page_token)
-
-
 # [END list_mine]
 
 
@@ -58,16 +56,14 @@ def add():
         if 'profile' in session:
             data['createdBy'] = session['profile']['displayName']
             data['createdById'] = session['profile']['id']
+            data['liked_by'] = [session['profile']['id']]
 
         blog_post = get_model().create(data)
 
         return redirect(url_for('.view', id=blog_post['id']))
 
     return render_template("blog_post_form.html", action="Add", blog_post={})
-
-
 # [END add]
-
 
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
 @oauth2.required
@@ -83,6 +79,20 @@ def edit(id):
 
     return render_template("blog_post_form.html", action="Edit",
                            blog_post=blog_post)
+
+
+@crud.route('/<id>/like', methods=['GET', 'POST'])
+@oauth2.required
+def like(id):
+
+    if request.method == 'POST':
+        data = {}
+
+        if 'profile' in session:
+            data['liked_by'] = session['profile']['id']
+            get_model().like(id, data)
+
+    return redirect(url_for('.list'))
 
 
 @crud.route('/<id>/delete')

@@ -20,11 +20,11 @@
                 {{blog_post.title}}
             </a>
             {% if session.profile %}
-            {% if session.profile.id == blog_post.createdById %}
-            <a href="/blog/{{blog_post.id}}/edit" class="btn bt-default btn-sm">
-                <i class="glyphicon glyphicon-edit"></i>
-            </a>
-            {% endif %}
+                {% if session.profile.id == blog_post.createdById %}
+                <a href="/blog/{{blog_post.id}}/edit" class="btn bt-default btn-sm">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </a>
+                {% endif %}
             {% endif %}
         </div>
         <div class="panel-body">
@@ -32,6 +32,17 @@
         </div>
         <div class="panel-footer">
             <small>Posted by {{blog_post.createdBy}}</small>
+            {% if session.profile %}
+                {% if session.profile.id != blog_post.createdById %}
+                    {% if session.profile.id not in blog_post.liked_by %}
+                    <form>
+                        <button type="submit" formmethod="post" formaction="/blog/{{blog_post.id}}/like">Like</button>
+                    </form>
+                    {% else %}
+                    Likes | {{blog_post.liked_by|length - 1}}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>

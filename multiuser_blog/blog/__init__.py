@@ -49,7 +49,7 @@ def create_flask_app(config, debug=False, testing=False, config_overrides=None):
 
     # [END logout]
 
-    # Register the Bookshelf CRUD blueprint.
+    # Register the CRUD blueprint.
     from .crud import crud
     app.register_blueprint(crud, url_prefix='/blog')
 
@@ -72,6 +72,10 @@ def create_flask_app(config, debug=False, testing=False, config_overrides=None):
 
 
 def get_model():
+    """
+    Sets the backend model to datastor and grabs it from the local dir. This
+    provides all the methods that can be called on the data.
+    """
     model_backend = current_app.config['DATA_BACKEND']
     if model_backend == 'datastore':
         from . import model_datastore
