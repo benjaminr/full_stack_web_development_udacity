@@ -13,18 +13,18 @@
 </div>
 
 {% if session.profile %}
-    {% if session.profile.id == blog_post.createdById %}
-    <div class="btn-group">
-        <a href="/blog/{{blog_post.id}}/edit" class="btn btn-primary btn-sm">
-            <i class="glyphicon glyphicon-edit"></i>
-            Edit blog post
-        </a>
-        <a href="/blog/{{blog_post.id}}/delete" class="btn btn-danger btn-sm">
-            <i class="glyphicon glyphicon-trash"></i>
-            Delete blog post
-        </a>
-    </div>
-    {% endif %}
+{% if session.profile.id == blog_post.createdById %}
+<div class="btn-group">
+    <a href="/blog/{{blog_post.id}}/edit" class="btn btn-primary btn-sm">
+        <i class="glyphicon glyphicon-edit"></i>
+        Edit blog post
+    </a>
+    <a href="/blog/{{blog_post.id}}/delete" class="btn btn-danger btn-sm">
+        <i class="glyphicon glyphicon-trash"></i>
+        Delete blog post
+    </a>
+</div>
+{% endif %}
 {% endif %}
 
 {% endblock %}

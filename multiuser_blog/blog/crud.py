@@ -35,6 +35,8 @@ def list_mine():
             "list_blog_posts.html",
             blog_posts=blog_posts,
             next_page_token=next_page_token)
+
+
 # [END list_mine]
 
 
@@ -63,6 +65,8 @@ def add():
         return redirect(url_for('.view', id=blog_post['id']))
 
     return render_template("blog_post_form.html", action="Add", blog_post={})
+
+
 # [END add]
 
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
@@ -70,25 +74,28 @@ def add():
 def edit(id):
     blog_post = get_model().read(id)
 
+    # only authors can edit
+
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
-
         blog_post = get_model().update(data, id)
 
         return redirect(url_for('.view', id=blog_post['id']))
-
-    return render_template("blog_post_form.html", action="Edit",
+    if session['profile']['id'] == blog_post['createdById']:
+        return render_template("blog_post_form.html", action="Edit",
                            blog_post=blog_post)
 
 
 @crud.route('/<id>/like', methods=['GET', 'POST'])
 @oauth2.required
 def like(id):
+    blog_post = get_model().read(id)
 
     if request.method == 'POST':
         data = {}
 
-        if 'profile' in session:
+        if ('profile' in session) and (session['profile']['id'] != blog_post[
+                'createdById']):
             data['liked_by'] = session['profile']['id']
             get_model().like(id, data)
 
