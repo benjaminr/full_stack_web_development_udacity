@@ -78,6 +78,7 @@ def edit(id):
 
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
+        data["liked_by"] = []
         blog_post = get_model().update(data, id)
 
         return redirect(url_for('.view', id=blog_post['id']))

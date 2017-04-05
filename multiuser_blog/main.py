@@ -1,6 +1,5 @@
 import blog
-
-from multiuser_blog import config
+import config
 
 app = blog.create_flask_app(config)
 

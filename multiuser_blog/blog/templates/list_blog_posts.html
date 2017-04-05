@@ -39,7 +39,7 @@
                 <button type="submit" formmethod="post" formaction="/blog/{{blog_post.id}}/like">Like</button>
             </form>
             {% else %}
-            Likes | {{blog_post.liked_by|length - 1}}
+            <small> | You Likey!</small>
             {% endif %}
             {% endif %}
             {% endif %}

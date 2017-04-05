@@ -19,10 +19,10 @@
         <p class="navbar-text navbar-right">
             {% if session.profile %}
             {% if session.profile.image %}
-                <img class="img-circle" src="{{session.profile.image.url}}" width="24">
-                {% endif %}
-                {{session.profile.displayName}}
-                <a href="/logout">logout</a>
+            <img class="img-circle" src="{{session.profile.image.url}}" width="24">
+            {% endif %}
+            {{session.profile.displayName}}
+            <a href="/logout">logout</a>
             {% else %}
             <a href="/oauth2authorize">Login</a>
             {% endif %}

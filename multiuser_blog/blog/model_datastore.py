@@ -96,14 +96,12 @@ def update(data, id=None):
 def like(id, data):
     ds = get_client()
     key = ds.key('Blog-Post', int(id))
-    entity = datastore.Entity(
-            key=key,
-            exclude_from_indexes=['body'])
-    if data["liked_by"] in entity["liked_by"]:
+    blog_post = ds.get(key)
+    if data["liked_by"] in blog_post["liked_by"]:
         return
-    entity["liked_by"].append(data["liked_by"])
-    ds.put(entity)
-    return from_datastore(entity)
+    blog_post["liked_by"].append(data["liked_by"])
+    ds.put(blog_post)
+    return from_datastore(blog_post)
 
 
 create = update
