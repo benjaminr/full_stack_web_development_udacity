@@ -91,7 +91,7 @@ def edit(id):
             blog_post = get_model().update(data, id)
             return render_template("blog_post_form.html", action="Edit",
                                    blog_post=blog_post)
-        
+
     return redirect(url_for('.view', id=blog_post['id']))
 
 
@@ -128,7 +128,8 @@ def like(id):
         data = defaultdict()
 
         if ('profile' in session) and (session['profile']['id'] != blog_post[
-            'createdById']):
+            'createdById']) and (session['profile']['id'] not in blog_post[
+            "liked_by"]):
             data['liked_by'] = session['profile']['id']
             get_model().like(id, data)
 
