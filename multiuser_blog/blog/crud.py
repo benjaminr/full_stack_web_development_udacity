@@ -139,5 +139,7 @@ def like(id):
 @crud.route('/<id>/delete')
 @oauth2.required
 def delete(id):
-    get_model().delete(id)
+    blog_post = get_model().read(id)
+    if session['profile']['id'] == blog_post['createdById']:
+        get_model().delete(id)
     return redirect(url_for('.list'))
