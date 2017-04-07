@@ -136,6 +136,7 @@ def like(id, data):
 create = update
 
 
+
 def delete(id):
     ds = get_client()
     key = ds.key('Blog-Post', int(id))
