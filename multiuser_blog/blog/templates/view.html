@@ -54,6 +54,20 @@
     </div>
 </div>
 
+{% if session.profile %}
+{% if session.profile.id == comment.createdById %}
+<div class="btn-group">
+    <a href="/blog/{{blog_post.id}}/comment/{{comment.id}}/edit" class="btn btn-primary btn-sm">
+        <i class="glyphicon glyphicon-edit"></i>
+        Edit comment
+    </a>
+    <a href="/blog/{{blog_post.id}}/comment/{{comment.id}}/delete" class="btn btn-danger btn-sm">
+        <i class="glyphicon glyphicon-trash"></i>
+        Delete comment
+    </a>
+</div>
+{% endif %}
+
 {% endfor %}
 
 {% endblock %}

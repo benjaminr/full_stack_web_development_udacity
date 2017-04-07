@@ -140,3 +140,8 @@ def delete(id):
     ds = get_client()
     key = ds.key('Blog-Post', int(id))
     ds.delete(key)
+
+def delete_comment(id):
+    ds = get_client()
+    key = ds.key('Comment', int(id))
+    ds.delete(key)

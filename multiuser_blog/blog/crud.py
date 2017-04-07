@@ -89,7 +89,7 @@ def edit(id):
         if request.method == 'POST':
             data = request.form.to_dict(flat=True)
             blog_post = get_model().update(data, id)
-            return render_template("blog_post_form.html", action="Edit",
+        return render_template("blog_post_form.html", action="Edit",
                                    blog_post=blog_post)
 
     return redirect(url_for('.view', id=blog_post['id']))
@@ -116,7 +116,34 @@ def comment(id):
                 blog_post["comments"].append(comment['id'])
             get_model().update(blog_post, id)
 
-        return redirect(url_for('.view', id=blog_post['id']))
+    return redirect(url_for('.view', id=blog_post['id']))
+
+
+@crud.route('/<id>/comment/<c_id>/edit', methods=['GET', 'POST'])
+@oauth2.required
+def edit_comment(id, c_id):
+    blog_post = get_model().read(id)
+    comment = get_model().read_comment(c_id)
+
+    if session['profile']['id'] == comment['createdById']:
+
+        # only authors can edit
+
+        if request.method == 'POST':
+            data = request.form.to_dict(flat=True)
+            comment = get_model().update(data, id)
+        return render_template("comment`_post_form.html", action="Edit",
+                                   comment=comment)
+
+    return redirect(url_for('.view', id=blog_post['id']))
+
+@crud.route('/<id>/comment/<c_id>/delete')
+@oauth2.required
+def delete(id, c_id):
+    comment = get_model().read_comment(c_id)
+    if session['profile']['id'] == comment['createdById']:
+        get_model().delete_comment(c_id)
+    return redirect(url_for('.list'))
 
 
 @crud.route('/<id>/like', methods=['GET', 'POST'])
