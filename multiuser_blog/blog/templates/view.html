@@ -7,9 +7,20 @@
         <h4 class="blog-post-title">
             {{blog_post.title}}
         </h4>
-        <h5 class="blog-post-author">By {{blog_post.createdBy|default('Anon', True)}}</h5>
         <p class="blog-post-body">{{blog_post.body}}</p>
     </div>
+    <h5 class="blog-post-author">By {{blog_post.createdBy|default('Anon', True)}}</h5>
+    {% if session.profile %}
+    {% if session.profile.id != blog_post.createdById %}
+    {% if session.profile.id not in blog_post.liked_by %}
+    <form>
+        <button type="submit" formmethod="post" formaction="/blog/{{blog_post.id}}/like">Like</button>
+    </form>
+    {% else %}
+    <small> | Likes [{{blog_post.liked_by|length}}]</small>
+    {% endif %}
+    {% endif %}
+    {% endif %}
 </div>
 
 {% if session.profile %}
