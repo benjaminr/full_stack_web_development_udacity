@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from blog import get_model, oauth2
 from flask import Blueprint, redirect, render_template, request, \
     session, url_for
@@ -43,7 +45,12 @@ def list_mine():
 @crud.route('/<id>')
 def view(id):
     blog_post = get_model().read(id)
-    return render_template("view.html", blog_post=blog_post)
+    comments = []
+    if "comments" in blog_post.keys():
+        for comment_id in blog_post["comments"]:
+            comment = get_model().read_comment(comment_id)
+            comments.append(comment)
+    return render_template("view.html", blog_post=blog_post, comments=comments)
 
 
 # [START add]
@@ -58,7 +65,8 @@ def add():
         if 'profile' in session:
             data['createdBy'] = session['profile']['displayName']
             data['createdById'] = session['profile']['id']
-            data['liked_by'] = [session['profile']['id']]
+            data['liked_by'] = []
+            data['comments'] = []
 
         blog_post = get_model().create(data)
 
@@ -78,13 +86,36 @@ def edit(id):
 
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
-        data["liked_by"] = []
         blog_post = get_model().update(data, id)
 
         return redirect(url_for('.view', id=blog_post['id']))
     if session['profile']['id'] == blog_post['createdById']:
         return render_template("blog_post_form.html", action="Edit",
-                           blog_post=blog_post)
+                               blog_post=blog_post)
+
+
+@crud.route('/<id>/comment', methods=['GET', 'POST'])
+@oauth2.required
+def comment(id):
+    if request.method == 'POST':
+        data = request.form.to_dict(flat=True)
+
+        # If the user is logged in, associate their profile with the new comment
+        if 'profile' in session:
+            data['createdBy'] = session['profile']['displayName']
+            data['createdById'] = session['profile']['id']
+            comment = get_model().comment(data)
+
+            # associate the comment with the blog post by ID
+            blog_post = get_model().read(id)
+            if "comments" in blog_post.keys():
+                blog_post["comments"].append(comment['id'])
+            else:
+                blog_post["comments"] = []
+                blog_post["comments"].append(comment['id'])
+            get_model().update(blog_post, id)
+
+        return redirect(url_for('.view', id=blog_post['id']))
 
 
 @crud.route('/<id>/like', methods=['GET', 'POST'])
@@ -93,10 +124,10 @@ def like(id):
     blog_post = get_model().read(id)
 
     if request.method == 'POST':
-        data = {}
+        data = defaultdict()
 
         if ('profile' in session) and (session['profile']['id'] != blog_post[
-                'createdById']):
+            'createdById']):
             data['liked_by'] = session['profile']['id']
             get_model().like(id, data)
 

@@ -25,6 +25,24 @@
     </a>
 </div>
 {% endif %}
+
+<p></p>
+<form>
+    <label for="body">Body</label>
+    <textarea name="body" id="body" class="form-control"></textarea>
+    <button type="submit" formmethod="post" formaction="/blog/{{blog_post.id}}/comment">Comment</button>
+</form>
 {% endif %}
+{% for comment in comments %}
+
+<div class="media">
+    <div class="media-body">
+        <p class="comment-body">{{comment.body}}</p>
+        <p></p>
+        <small class="comment-author">By {{comment.createdBy|default('Anon', True)}}</small>
+    </div>
+</div>
+
+{% endfor %}
 
 {% endblock %}
