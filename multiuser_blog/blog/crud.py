@@ -82,16 +82,17 @@ def add():
 def edit(id):
     blog_post = get_model().read(id)
 
-    # only authors can edit
-
-    if request.method == 'POST':
-        data = request.form.to_dict(flat=True)
-        blog_post = get_model().update(data, id)
-
-        return redirect(url_for('.view', id=blog_post['id']))
     if session['profile']['id'] == blog_post['createdById']:
-        return render_template("blog_post_form.html", action="Edit",
-                               blog_post=blog_post)
+
+        # only authors can edit
+
+        if request.method == 'POST':
+            data = request.form.to_dict(flat=True)
+            blog_post = get_model().update(data, id)
+            return render_template("blog_post_form.html", action="Edit",
+                                   blog_post=blog_post)
+        
+    return redirect(url_for('.view', id=blog_post['id']))
 
 
 @crud.route('/<id>/comment', methods=['GET', 'POST'])
