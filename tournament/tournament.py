@@ -6,16 +6,19 @@
 import psycopg2
 
 
-def connect():
+def connect(database_name="tournament"):
     """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
-
+    try:
+        db = psycopg2.connect("dbname={}".format(database_name))
+        cursor = db.cursor()
+        return db, cursor
+    except Exception as e:
+        print(e)
 
 def connect_execute_close(sql):
     """Connect to the database, execute the SQL and then close the
     connection."""
-    db = connect()
-    c = db.cursor()
+    db, c = connect()
     c.execute(*sql)
     db.commit()
     db.close()
@@ -23,9 +26,8 @@ def connect_execute_close(sql):
 
 def connect_execute_close_fetch_results(sql):
     """Connect to the database, execute the SQL and then close the
-    connection."""
-    db = connect()
-    c = db.cursor()
+    connection. Also passing out result for further use."""
+    db, c = connect()
     c.execute(*sql)
     result = c.fetchall()
     db.close()
