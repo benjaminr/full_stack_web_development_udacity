@@ -15,6 +15,7 @@ def connect(database_name="tournament"):
     except Exception as e:
         print(e)
 
+
 def connect_execute_close(sql):
     """Connect to the database, execute the SQL and then close the
     connection."""
@@ -36,18 +37,19 @@ def connect_execute_close_fetch_results(sql):
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    connect_execute_close(("DELETE FROM matches",))
+    connect_execute_close(("TRUNCATE matches CASCADE",))
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    connect_execute_close(("DELETE FROM players",))
+    connect_execute_close(("TRUNCATE players CASCADE",))
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
     return \
-    connect_execute_close_fetch_results(("SELECT COUNT(*) FROM players",))[0][0]
+        connect_execute_close_fetch_results(("SELECT COUNT(*) FROM players",))[
+            0][0]
 
 
 def registerPlayer(name):
@@ -76,13 +78,7 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    sql = ("""
-               SELECT matches_and_wins.id, players.name,
-               matches_and_wins.wins, matches_and_wins.matches
-               FROM players, matches_and_wins
-               WHERE players.id = matches_and_wins.id
-               ORDER BY matches_and_wins.wins desc;
-           """)
+    sql = "SELECT * from player_standings;"
 
     result = connect_execute_close_fetch_results((sql,))
     return [(int(row[0]), str(row[1]), int(row[2]), int(row[3])) for row in
@@ -97,9 +93,9 @@ def reportMatch(winner, loser):
       loser:  the id number of the player who lost
     """
     connect_execute_close((
-                          "INSERT INTO matches (id, winner, loser) VALUES ("
-                          "DEFAULT, %s, %s)",
-                          (winner, loser)))
+        "INSERT INTO matches (id, winner, loser) VALUES ("
+        "DEFAULT, %s, %s)",
+        (winner, loser)))
 
 
 def swissPairings():
@@ -134,6 +130,6 @@ def swissPairings():
             player_two_name = standings[player_index + 1][1]
 
             pair = (
-            player_one_id, player_one_name, player_two_id, player_two_name)
+                player_one_id, player_one_name, player_two_id, player_two_name)
             pairs.append(pair)
     return pairs

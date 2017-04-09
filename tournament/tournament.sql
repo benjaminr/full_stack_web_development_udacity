@@ -43,3 +43,11 @@ CREATE VIEW matches_and_wins
     AS SELECT total_matches.id, total_wins.wins, total_matches.total_matches AS matches
     FROM total_matches, total_wins
     WHERE total_matches.id = total_wins.id;
+
+-- View for grabbing the curent player standings.
+CREATE VIEW player_standings
+    AS SELECT matches_and_wins.id, players.name,
+    matches_and_wins.wins, matches_and_wins.matches
+    FROM players, matches_and_wins
+    WHERE players.id = matches_and_wins.id
+    ORDER BY matches_and_wins.wins desc;
