@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>{{action}}</h3>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" value="{{item.name}}" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label for="body">Body</label>
+        <textarea name="body" id="body" class="form-control">{{item.description}}</textarea>
+    </div>
+
+    <div>
+
+        Posting as {{session.profile.displayName}}
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="cancel" onclick="window.location=document.referrer;return false;" class="btn btn-warning">Cancel
+    </button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if session.profile %}
+<a href="/catalog/my-items" class="btn btn-default btn-sm">
+    My Items
+</a>
+<a href="/catalog/add-item" class="btn btn-success btn-sm">
+    <i class="glyphicon glyphicon-plus"></i>
+    Add item
+</a>
+{% endif %}
+
+{% for item in items %}
+<div class="media">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="panel-title" href="/catalog/{{item.id}}">
+                {{item.name}}
+            </a>
+            {% if session.profile %}
+            {% if session.profile.id == item.createdById %}
+            <a href="/catalog/{{item.id}}/edit" class="btn bt-default btn-sm">
+                <i class="glyphicon glyphicon-edit"></i>
+            </a>
+            {% endif %}
+            {% endif %}
+        </div>
+        <div class="panel-body">
+            {{item.description[:100]}} ...
+        </div>
+        <div class="panel-footer">
+            <small>Entered by {{item.createdBy}}</small>
+            {% if session.profile %}
+            {% if session.profile.id != item.createdById %}
+            {% if session.profile.id not in item.liked_by %}
+            <form>
+                <button type="submit" formmethod="post" formaction="/catalog/{{item.id}}/like">Like</button>
+            </form>
+            {% else %}
+            <small> | Likes [{{item.liked_by|length}}]</small>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% else %}
+<p>No items found</p>
+{% endfor %}
+
+{% if next_page_token %}
+<nav>
+    <ul class="pager">
+        <li><a href="?page_token={{next_page_token}}">More</a></li>
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

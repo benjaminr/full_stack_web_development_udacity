@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="media">
+    <div class="media-body">
+        <h4 class="item-name">
+            {{item.name}}
+        </h4>
+        <p class="item-description">{{item.description}}</p>
+    </div>
+    <h5 class="item-entered-by">By {{item.createdBy|default('Anon', True)}}</h5>
+    {% if session.profile %}
+    {% if session.profile.id != item.createdById %}
+    {% if session.profile.id not in item.liked_by %}
+    <form>
+        <button type="submit" formmethod="post" formaction="/catalog/{{item.id}}/like">Like</button>
+    </form>
+    {% else %}
+    <small> | Likes [{{blog_post.liked_by|length}}]</small>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+</div>
+
+{% if session.profile %}
+{% if session.profile.id == blog_post.createdById %}
+<div class="btn-group">
+    <a href="/catalog/{{item.id}}/edit" class="btn btn-primary btn-sm">
+        <i class="glyphicon glyphicon-edit"></i>
+        Edit item
+    </a>
+    <a href="/catalog/{{item.id}}/delete" class="btn btn-danger btn-sm">
+        <i class="glyphicon glyphicon-trash"></i>
+        Delete item
+    </a>
+</div>
+{% endif %}
+
+<p></p>
+<form>
+    <label for="body">Comments</label>
+    <textarea name="body" id="body" class="form-control"></textarea>
+    <button type="submit" formmethod="post" formaction="/catalog/{{item.id}}/comment">Comment</button>
+</form>
+{% endif %}
+
+{% if comments|length > 0 %}
+
+{% for comment in comments %}
+
+<div class="media">
+    <div class="media-body">
+        <p class="comment-body">{{comment.body}}</p>
+        <p></p>
+        <small class="comment-author">By {{comment.createdBy}}</small>
+    </div>
+</div>
+
+{% if session.profile %}
+{% if session.profile.id == comment.createdById %}
+<div class="btn-group">
+    <a href="/catalog/{{item.id}}/comment/{{comment.id}}/edit" class="btn btn-primary btn-sm">
+        <i class="glyphicon glyphicon-edit"></i>
+        Edit comment
+    </a>
+    <a href="/catalog/{{item.id}}/comment/{{comment.id}}/delete" class="btn btn-danger btn-sm">
+        <i class="glyphicon glyphicon-trash"></i>
+        Delete comment
+    </a>
+</div>
+{% endif %}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% endblock %}

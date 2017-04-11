@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>{{action}}</h3>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label for="body">Body</label>
+        <textarea name="body" id="body" class="form-control">{{comment.body}}</textarea>
+    </div>
+
+    <div>
+
+        Editing as {{session.profile.displayName}}
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="cancel" onclick="window.location=document.referrer;return false;" class="btn btn-warning">Cancel
+    </button>
+</form>
+
+{% endblock %}
