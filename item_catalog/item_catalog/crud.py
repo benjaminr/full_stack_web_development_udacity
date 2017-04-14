@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from item_catalog import get_model, oauth2
 from flask import Blueprint, redirect, render_template, request, \
-    session, url_for
+    session, url_for, jsonify
 
 crud = Blueprint('crud', __name__)
 
@@ -51,6 +51,11 @@ def view(id):
             comment = get_model().read_comment(comment_id)
             comments.append(comment)
     return render_template("view.html", item=item, comments=comments)
+
+@crud.route('/<id>/json')
+def view_json(id):
+    item = get_model().read(id)
+    return jsonify(item)
 
 
 # [START add]

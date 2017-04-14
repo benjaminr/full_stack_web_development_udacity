@@ -39,10 +39,10 @@
                 <button type="submit" formmethod="post" formaction="/catalog/{{item.id}}/like">Like</button>
             </form>
             {% else %}
-            <small> | Likes [{{item.liked_by|length}}]</small>
             {% endif %}
             {% endif %}
             {% endif %}
+            <small>| Likes {{item.liked_by|length}} | {{item.category}}</small>
         </div>
     </div>
 </div>

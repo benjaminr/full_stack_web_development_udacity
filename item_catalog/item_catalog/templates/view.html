@@ -16,15 +16,14 @@
     <form>
         <button type="submit" formmethod="post" formaction="/catalog/{{item.id}}/like">Like</button>
     </form>
-    {% else %}
-    <small> | Likes [{{blog_post.liked_by|length}}]</small>
     {% endif %}
     {% endif %}
     {% endif %}
+    <p><small>| Likes {{item.liked_by|length}} | {{item.category}}</small></p>
 </div>
 
 {% if session.profile %}
-{% if session.profile.id == blog_post.createdById %}
+{% if session.profile.id == item.createdById %}
 <div class="btn-group">
     <a href="/catalog/{{item.id}}/edit" class="btn btn-primary btn-sm">
         <i class="glyphicon glyphicon-edit"></i>

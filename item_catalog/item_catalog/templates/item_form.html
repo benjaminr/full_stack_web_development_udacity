@@ -6,13 +6,25 @@
 <form method="POST" enctype="multipart/form-data">
 
     <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title" value="{{item.name}}" class="form-control"/>
+        <label for="name">Item Name</label>
+        <input type="text" name="name" id="name" value="{{item.name}}" class="form-control"/>
     </div>
 
     <div class="form-group">
-        <label for="body">Body</label>
-        <textarea name="body" id="body" class="form-control">{{item.description}}</textarea>
+        <label for="description">Item Description</label>
+        <textarea name="description" id="description" class="form-control">{{item.description}}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select class="form-control" name="category" id="category" value="{{item.category}}">
+            <option selected value>Categories</option>
+            <option value="Video Game">Video Game</option>
+            <option value="TV Show">TV Show</option>
+            <option value="Movie">Movie</option>
+            <option value="Podcast">Podcast</option>
+            <option value="Other">Other</option>
+        </select>
     </div>
 
     <div>
