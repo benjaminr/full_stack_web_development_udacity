@@ -19,7 +19,7 @@
     {% endif %}
     {% endif %}
     {% endif %}
-    <p><small>| Likes {{item.liked_by|length}} | {{item.category}}</small></p>
+    <p><small>| Likes {{item.liked_by|length}} | <a href="/catalog/category/{{item.category | urlencode}}">{{item.category}}</a></small></p>
 </div>
 
 {% if session.profile %}

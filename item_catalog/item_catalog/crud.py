@@ -7,6 +7,7 @@ from flask import Blueprint, redirect, render_template, request, \
 crud = Blueprint('crud', __name__)
 
 
+# Default view, list all items in the datastore
 @crud.route("/")
 def list():
     token = request.args.get('page_token', None)
@@ -21,7 +22,7 @@ def list():
             next_page_token=next_page_token)
 
 
-# [START list_mine]
+# List all items that match the currently oauthed user
 @crud.route("/my-items")
 @oauth2.required
 def list_mine():
@@ -38,10 +39,24 @@ def list_mine():
             items=items,
             next_page_token=next_page_token)
 
+# List all items of a particular category
+@crud.route("/category/<category>")
+@oauth2.required
+def list_category(category):
+    token = request.args.get('page_token', None)
+    if token:
+        token = token.encode('utf-8')
 
-# [END list_mine]
+    items, next_page_token = get_model().list_by_category(
+            category=category,
+            cursor=token)
 
+    return render_template(
+            "list_items.html",
+            items=items,
+            next_page_token=next_page_token)
 
+# View an individual item
 @crud.route('/<id>')
 def view(id):
     item = get_model().read(id)
@@ -52,13 +67,13 @@ def view(id):
             comments.append(comment)
     return render_template("view.html", item=item, comments=comments)
 
+# View the json representation of an item
 @crud.route('/<id>/json')
 def view_json(id):
     item = get_model().read(id)
     return jsonify(item)
 
-
-# [START add]
+# Add a new item
 @crud.route('/add-item', methods=['GET', 'POST'])
 @oauth2.required
 def add():
@@ -79,9 +94,7 @@ def add():
 
     return render_template("item_form.html", action="Add", item={})
 
-
-# [END add]
-
+# Edit an existing item
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
 @oauth2.required
 def edit(id):
@@ -103,7 +116,7 @@ def edit(id):
 
     return redirect(url_for('.view', id=item['id']))
 
-
+# Add a comment to an item
 @crud.route('/<id>/comment', methods=['GET', 'POST'])
 @oauth2.required
 def comment(id):
@@ -127,7 +140,7 @@ def comment(id):
 
     return redirect(url_for('.view', id=item['id']))
 
-
+# Edit a comment on an item, providing the user and createdby match
 @crud.route('/<id>/comment/<c_id>/edit', methods=['GET', 'POST'])
 @oauth2.required
 def edit_comment(id, c_id):
@@ -149,6 +162,7 @@ def edit_comment(id, c_id):
 
     return redirect(url_for('.view', id=item['id']))
 
+# Delete a comment providing the user and createdby match
 @crud.route('/<id>/comment/<c_id>/delete')
 @oauth2.required
 def delete_comment(id, c_id):
@@ -160,7 +174,7 @@ def delete_comment(id, c_id):
         get_model().delete_comment(c_id)
     return redirect(url_for('.view', id=item['id']))
 
-
+# allow a user to like others' posts
 @crud.route('/<id>/like', methods=['GET', 'POST'])
 @oauth2.required
 def like(id):
@@ -177,7 +191,7 @@ def like(id):
 
     return redirect(url_for('.list'))
 
-
+# allow a user to delete their own posts
 @crud.route('/<id>/delete')
 @oauth2.required
 def delete(id):
