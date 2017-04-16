@@ -16,7 +16,7 @@ def list():
     blog_posts, next_page_token = get_model().list(cursor=token)
 
     return render_template(
-            "list_blog_posts.html",
+            "list_items.html",
             blog_posts=blog_posts,
             next_page_token=next_page_token)
 
@@ -34,7 +34,7 @@ def list_mine():
             cursor=token)
 
     return render_template(
-            "list_blog_posts.html",
+            "list_items.html",
             blog_posts=blog_posts,
             next_page_token=next_page_token)
 
@@ -72,7 +72,7 @@ def add():
 
         return redirect(url_for('.view', id=blog_post['id']))
 
-    return render_template("blog_post_form.html", action="Add", blog_post={})
+    return render_template("item_form.html", action="Add", blog_post={})
 
 
 # [END add]
@@ -93,7 +93,7 @@ def edit(id):
             blog_post = get_model().update(blog_post, id)
             return redirect(url_for('.view', id=blog_post['id']))
 
-        return render_template("blog_post_form.html", action="Edit",
+        return render_template("item_form.html", action="Edit",
                                    blog_post=blog_post)
 
     return redirect(url_for('.view', id=blog_post['id']))
