@@ -106,8 +106,9 @@ def edit(id):
 
         if request.method == 'POST':
             data = request.form.to_dict(flat=True)
-            item['title'] = data['title']
-            item['body'] = data['body']
+            item['name'] = data['name']
+            item['description'] = data['desscription']
+            item['category'] = data['category']
             item = get_model().update(item, id)
             return redirect(url_for('.view', id=item['id']))
 
