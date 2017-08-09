@@ -8,7 +8,7 @@ var currentFilter = ko.observable();
 // Global for Google map
 var map;
 // SONGKICK API Key
-var api_key = "";
+var api_key = "griCg3AxwnJ0VYHV";
 // SONGKICK Locations Endpoint
 var locations_rest_endpoint = `http://api.songkick.com/api/3.0/search/locations.json?location=geo`;
 var infowindow;
