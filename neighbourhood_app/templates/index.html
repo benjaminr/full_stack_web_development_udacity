@@ -28,7 +28,7 @@
   </nav>
   <div class="row" id='app'>
     <div class="col s12 m4 l3" id="menu" data-bind="foreach: filterMarkers">
-      <div class="card-panel white">
+      <div data-bind="attr: {id: id}, click: function() { showMarker(id) }" class="card-panel white">
         <h5>
           <a class="primary-text-color" data-bind="attr: { href: uri }, text: artist.displayName"></a>
         </h5>

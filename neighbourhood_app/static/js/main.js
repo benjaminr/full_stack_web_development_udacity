@@ -41,6 +41,16 @@ function EventsViewModel() {
         currentFilter(type);
     };
 
+    self.showMarker = function(id) {
+        return markers().filter(function(marker) {
+          if (marker.id == id) {
+              marker.setMap(map);
+          } else {
+              marker.setMap(null);
+          }
+        });
+    };
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -61,6 +71,7 @@ function createMarker(place, delay_time) {
       map: map,
       animation: google.maps.Animation.DROP,
       position: {lat: lat, lng: lng},
+      id: place.id,
       type: place.type,
       uri: place.uri,
       venue: place.venue,
@@ -102,6 +113,7 @@ function getSongkickEventsLocation(lat, lng) {
     var upcomingEvents = `https://api.songkick.com/api/3.0/metro_areas/${metro_area_id}/calendar.json?apikey=${self.api_key}`
     $.getJSON(upcomingEvents, function(data) {
       var events = data.resultsPage.results.event;
+      console.log(events);
       createMarkers(events);
     });
   });
@@ -140,7 +152,7 @@ function initMap() {
   var infowindowContent = document.getElementById('infowindow-content');
   infowindow.setContent(infowindowContent);
   var marker = new google.maps.Marker({
-    map: map,
+    map: null,
     anchorPoint: new google.maps.Point(0, -29)
   });
 
