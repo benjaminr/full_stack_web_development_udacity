@@ -45,6 +45,7 @@ function EventsViewModel() {
         return markers().filter(function(marker) {
           if (marker.id == id) {
               marker.setMap(map);
+              map.setCenter(marker.getPosition());
           } else {
               marker.setMap(null);
           }
