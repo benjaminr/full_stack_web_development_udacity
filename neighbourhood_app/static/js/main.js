@@ -8,9 +8,9 @@ var currentFilter = ko.observable();
 // Global for Google map
 var map;
 // SONGKICK API Key
-var api_key = "griCg3AxwnJ0VYHV";
+var api_key = "";
 // SONGKICK Locations Endpoint
-var locations_rest_endpoint = `http://api.songkick.com/api/3.0/search/locations.json?location=geo`;
+var locations_rest_endpoint = `https://api.songkick.com/api/3.0/search/locations.json?location=geo`;
 var infowindow;
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -99,7 +99,7 @@ function createMarkers(events) {
 function getSongkickEventsLocation(lat, lng) {
   $.getJSON(locations_rest_endpoint + `:${lat},${lng}&apikey=${api_key}`, function(data) {
     var metro_area_id = data.resultsPage.results.location[0].metroArea.id;
-    var upcomingEvents = `http://api.songkick.com/api/3.0/metro_areas/${metro_area_id}/calendar.json?apikey=${self.api_key}`
+    var upcomingEvents = `https://api.songkick.com/api/3.0/metro_areas/${metro_area_id}/calendar.json?apikey=${self.api_key}`
     $.getJSON(upcomingEvents, function(data) {
       var events = data.resultsPage.results.event;
       createMarkers(events);
