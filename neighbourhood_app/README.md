@@ -3,8 +3,6 @@ Built using Flask, an app to lookup local gigs in your area!
 
 Integrates SONGKICK with Google Maps!
 
-The live public version can be found at https://bens-blog.appspot.com
-
 ## Prereqs
 Depends on Python and libraries specified in requirements. Easily deployed to Heroku.
 
