@@ -29,12 +29,12 @@
   <div class="row" id='app'>
     <div class="col s12 m4 l3" id="menu" data-bind="foreach: filterMarkers">
       <div data-bind="attr: {id: id}, click: function() { showMarker(id) }" class="card-panel white">
-        <h5>
-          <a class="primary-text-color" data-bind="attr: { href: uri }, text: artist.displayName"></a>
-        </h5>
         <h6>
-          <a class="secondary-text-color" data-bind="attr: { href: venue.uri }, text: venue.displayName"></a>, <p class="secondary-text-color" data-bind="text: location.city"></p>
+          <a class="primary-text-color" data-bind="attr: { href: uri }, text: artist.displayName"></a>
         </h6>
+        <p>
+          <a class="secondary-text-color" data-bind="attr: { href: venue.uri }, text: venue.displayName"></a>, <p class="secondary-text-color" data-bind="text: location.city"></p>
+        </p>
         <p class="secondary-text-color" data-bind="text: date">
           <p>
       </div>

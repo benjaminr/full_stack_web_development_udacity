@@ -46,6 +46,8 @@ function EventsViewModel() {
           if (marker.id == id) {
               marker.setMap(map);
               map.setCenter(marker.getPosition());
+              infowindow.setContent(marker.content);
+              infowindow.open(map, marker);
           } else {
               marker.setMap(null);
           }
@@ -65,7 +67,7 @@ function createMarker(place, delay_time) {
     var lng = place.venue.lng;
 
     // Venue information HTML for Google maps infowindow
-    var content = '<h3><a href="' + place.uri + '">' + place.displayName + '</a>' + '</h3>';
+    var content = '<p><a href="' + place.uri + '">' + place.displayName + '</a>' + '</p>';
 
     // Create a marker and add additional params from SONGKICK data
     var marker = new google.maps.Marker({
@@ -79,7 +81,8 @@ function createMarker(place, delay_time) {
       location: place.location,
       artist: place.performance[0].artist,
       date: place.start.date,
-      popularity: place.popularity
+      popularity: place.popularity,
+      content: content
     });
 
     // Place marker into markers Knockoutjs observableArray
@@ -111,7 +114,7 @@ function createMarkers(events) {
 function getSongkickEventsLocation(lat, lng) {
   $.getJSON(locations_rest_endpoint + `:${lat},${lng}&apikey=${api_key}`, function(data) {
     var metro_area_id = data.resultsPage.results.location[0].metroArea.id;
-    var upcomingEvents = `https://api.songkick.com/api/3.0/metro_areas/${metro_area_id}/calendar.json?apikey=${self.api_key}`
+    var upcomingEvents = `https://api.songkick.com/api/3.0/metro_areas/${metro_area_id}/calendar.json?apikey=${self.api_key}`;
     $.getJSON(upcomingEvents, function(data) {
       var events = data.resultsPage.results.event;
       console.log(events);
