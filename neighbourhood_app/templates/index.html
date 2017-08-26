@@ -44,17 +44,13 @@
 
     </div>
     <div id="buttons">
+      <a data-bind="click: function() { filter('All') }" class="btn-floating btn-large waves-effect waves-light accent-color">All</a>
       <a data-bind="click: function() { filter('Festival') }" class="btn-floating btn-large waves-effect waves-light accent-color"><i class="material-icons">nature_people</i></a>
       <a data-bind="click: function() { filter('Concert') }" class="btn-floating btn-large waves-effect waves-light accent-color"><i class="material-icons">group</i></a>
     </div>
-    <div id="infowindow-content">
-      <img src="" width="16" height="16" id="place-icon">
-      <span id="place-name" class="title"></span><br>
-      <span id="place-address"></span>
-    </div>
 
-    <script async defer src="/static/js/main.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADP79cnrs7ZDd2n5kLvxFfS84dpTitIgY&libraries=places&callback=initMap"></script>
+    <script src="/static/js/main.js"></script>
+    <script onerror="googleMapsError()" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADP79cnrs7ZDd2n5kLvxFfS84dpTitIgY&libraries=places&callback=initMap"></script>
     <!-- Compiled and minified JavaScript -->
   </div>
 </body>

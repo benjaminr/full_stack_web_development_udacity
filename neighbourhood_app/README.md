@@ -17,11 +17,18 @@ Clicking a card will show its marker on the map.
 Cards link through to Songkick pages.
 
 ### Local
+
+
 Clone this repo, cd into the cloned repo directory and execute the following:
+
+```bash
+pip install -r requirements.txt
+```
+This will install the required packages, then run the following...
+
 ```bash
 python app.py
 ```
 This will launch a local Flask webserver at 127.0.0.1.
 
 You may need to enable unsecure scripts to load in Chrome, as the Songkick API is currently issued over HTTP and everything else is HTTPS.
-

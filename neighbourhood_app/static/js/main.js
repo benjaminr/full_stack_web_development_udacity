@@ -25,12 +25,18 @@ function EventsViewModel() {
     self.filterMarkers = ko.computed(function() {
       if(!currentFilter()) {
           return markers();
-      } else {
+      } else if (currentFilter() == "All") {
+          return markers().filter(function(marker) {
+              marker.setVisible(true);
+              return true;
+          });
+      }
+      else {
           return markers().filter(function(marker) {
               if (marker.type != currentFilter()) {
-                marker.setMap(null);
+                marker.setVisible(false);
               } else {
-                marker.setMap(map);
+                marker.setVisible(true);
                 return true;
               }
           });
@@ -44,19 +50,23 @@ function EventsViewModel() {
     self.showMarker = function(id) {
         return markers().filter(function(marker) {
           if (marker.id == id) {
-              marker.setMap(map);
+              marker.setVisible(true);
+              marker.setAnimation(google.maps.Animation.BOUNCE);
+              setTimeout(function(){ marker.setAnimation(null); }, 750);
               map.setCenter(marker.getPosition());
               infowindow.setContent(marker.content);
               infowindow.open(map, marker);
           } else {
-              marker.setMap(null);
+              marker.setVisible(false);
           }
         });
     };
 
 }
 ////////////////////////////////////////////////////////////////////////////////
-
+function googleMapsError(data) {
+  alert("Map API Failed");
+}
 ////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
 ////////////////////////////////////////////////////////////////////////////////
@@ -97,9 +107,9 @@ function createMarker(place, delay_time) {
     });
 }
 ////////////////////////////////////////////////////////////////////////////////
-function setMapOnAll(map) {
+function setVisibleOnAll(value) {
   markers().forEach(function(v,i){
-    v.setMap(map);
+    v.setVisible(value);
   });
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +129,13 @@ function getSongkickEventsLocation(lat, lng) {
       var events = data.resultsPage.results.event;
       console.log(events);
       createMarkers(events);
+    })
+    .fail(function(data){
+        alert("Event Search Failed");
     });
+  })
+  .fail(function(data){
+      alert("Venue Search Failed");
   });
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -128,10 +144,10 @@ function getSongkickEventsLocation(lat, lng) {
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {
-      lat: -33.8688,
-      lng: 151.2195
+      lat: 51.50,
+      lng: 0.12
     },
-    zoom: 13
+    zoom: 8
   });
 
   // Grab DOM elements for card and user input, assign local vars
@@ -151,19 +167,19 @@ function initMap() {
   // bounds option in the request.
   autocomplete.bindTo('bounds', map);
 
-
   infowindow = new google.maps.InfoWindow();
-  var infowindowContent = document.getElementById('infowindow-content');
-  infowindow.setContent(infowindowContent);
-  var marker = new google.maps.Marker({
-    map: null,
-    anchorPoint: new google.maps.Point(0, -29)
-  });
+
+  getSongkickEventsLocation(51.50, 0.12);
 
   // When a user types a new location
   autocomplete.addListener('place_changed', function() {
     infowindow.close();
-    marker.setVisible(false);
+
+    var marker = new google.maps.Marker({
+      map: null,
+      anchorPoint: new google.maps.Point(0, -29)
+    });
+
     var place = autocomplete.getPlace();
     if (!place.geometry) {
       // User entered the name of a Place that was not suggested and
@@ -175,9 +191,10 @@ function initMap() {
     // If the place has a geometry, then present it on a map.
     if (place.geometry.viewport) {
       map.fitBounds(place.geometry.viewport);
+      map.setZoom(8);
     } else {
       map.setCenter(place.geometry.location);
-      map.setZoom(12);
+      map.setZoom(8);
     }
 
     // Set lat lng for shorthand
@@ -189,7 +206,7 @@ function initMap() {
     marker.setVisible(true);
 
     // Clear Existing markers
-    setMapOnAll(null);
+    setVisibleOnAll(false);
     markers.removeAll();
 
     // Get new data and create markers
